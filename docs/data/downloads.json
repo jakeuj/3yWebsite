@@ -1,0 +1,67 @@
+[
+  {
+    "pages": [
+      {
+        "path": "download/00.html",
+        "title": "三國歪傳之降龍伏虎",
+        "summary": "回索引 | 下一篇 參考手冊 一、基本配備﹕ 1) 一台以 linux(v2.0.30 以上) 為作業系統的主機﹐CPU 486 即可﹐但記憶體最好32M以上﹐以釋放版本為例記憶體需求約為12M ﹐且 linux核心必須有 /proc 虛擬檔案的功能﹐但不需 root 的權限。 2) 最好具備網路功能。 3) 具有 tar(v1,12) 、 zip(v2.1) 、 gcc(v2.7.2.2) 等程式 4) 具有 crypt library（一般 linux 內附） 二、新手上"
+      },
+      {
+        "path": "download/01.html",
+        "title": "三國歪傳之降龍伏虎",
+        "summary": "上一篇 | 回索引 | 下一篇 怪物寫法介紹 一、檔案位置﹕ 所有在 <區域>/mob/ 目錄底下的 *.mob 檔案都是怪物檔案﹐而所有 的怪物就是由這些檔案所組成。 二、語法﹕ * /* 任何由 * 開頭的這一行為註解﹐系統不會讀入 */ Vnum <數值> Name <字串>~ ShortDesc <字串>~ Description <字串> ~ Deadmsg <字串> ~ Act <數值或字串常數> Effect '<字串>' Alignment <數值> Leve"
+      },
+      {
+        "path": "download/02.html",
+        "title": "三國歪傳之降龍伏虎",
+        "summary": "上一篇 | 回索引 | 下一篇 房間寫法介紹 一、檔案位置﹕ 所有在 <區域>/roo/ 目錄底下的 *.roo 檔案都是房間檔案﹐而區域 就是由這些檔案所相連而成。 二、格式: * /* 任何有 * 開頭的就是註解﹐系統不會讀入 */ Vnum <數字> Name <字串>~ Description <字?gt; ~ SectorType <數字或字串常數> RoomFlag <字串常數> Yes ~ #Exit * /* 任何有 * 開頭的就是註解﹐系統不會讀入 */ D"
+      },
+      {
+        "path": "download/03.html",
+        "title": "三國歪傳之降龍伏虎",
+        "summary": "上一篇 | 回索引 | 下一篇 物品寫法介紹 一、檔案位置﹕ 所有在 <區域>/obj/ 目錄底下的 *.obj 檔案都是物品檔案﹐而所有 的物品就是由這些檔案所組成。 二、格式﹕ * /* 任何有 * 開頭的這一行是註解﹐系統不會讀入 */ Vnum <數值> Name <字串>~ ShortDesc <字串>~ Description <字串> ~ Remmsg <字串> ~ Wearmsg <字串> ~ ItemType <數值或字串常數> WearLoc <數值或字串"
+      },
+      {
+        "path": "download/04.html",
+        "title": "三國歪傳之降龍伏虎",
+        "summary": "上一篇 | 回索引 | 下一篇 重置寫法介紹 一、檔案位置﹕ 所有在 <區域>/res/ 目錄底下的 *.res 檔案都是重置檔案﹐而所有 的重置就是由這些檔案所組成。 二、格式﹕ * /* 任何由 * 開頭的這一行為註解﹐系統不會讀入 */ M <怪物號碼:數字> <總限制數:數字> <房間號碼:數字> <註解:字串> O <物品號碼:數字> <常數> <房間號碼:數字> <註解:字串> P <物品號碼:數字> <常數> <物品號碼:數字> <註解:字串> G <物品號碼:"
+      },
+      {
+        "path": "download/05.html",
+        "title": "三國歪傳之降龍伏虎",
+        "summary": "上一篇 | 回索引 | 下一篇 區域標題寫法介紹 一、檔案位置﹕ 標題檔案位在區域目錄下﹐如以洛陽為例﹐洛陽目錄下的檔案與目錄如下﹕ [lc] \u001bmud:~/mud/area/loyang$ ls index \u001bmob/\u001b obj/\u001b res/ \u001b roo/ \u001b shp/ 其中 index 檔案即為標題檔案﹐為區域所必須﹐若缺乏則區域無法讀入。 二、格式﹕ * /* 以 * 開頭的這一行則為註解﹐系統不會讀入 */ Echo <字串常數或數字> Editor <字串>~ Na"
+      },
+      {
+        "path": "download/06.html",
+        "title": "三國歪傳之降龍伏虎",
+        "summary": "上一篇 | 回索引 | 下一篇 區域商店寫作 一、檔案位置﹕ 所有在 <區域>/shp/ 目錄底下的 *.shp 檔案都是商店檔案﹐而所有 的商店就是由這些檔案所組成﹐一個檔案代表一個商店。 二、格式﹕ * /* 任何由 * 開頭的這一行為註解﹐系統不會讀入 */ Type <數值或字串常數> Keeper <數值> Object <數值> <數值> <數值> <數值> <數值> 或 Object1 <數值> .. .. Object5 <數值> Horse <數值> <數值"
+      },
+      {
+        "path": "download/07.html",
+        "title": "三國歪傳之降龍伏虎",
+        "summary": "上一篇 | 回索引 怪物程式寫作 一、怪物可教學技能撰寫方法： (1) 格式 #Learn Adept <數字> /* 熟練度 */ Cost <數字> /* 價 格 */ Inventory <數字> /* 隱藏度 */ Name <字串> /* 技能名 */ End (2) 範例 #Learn Adept 80 Cost 100 Inventory 1 Name 'fire lance' End (3) 說明 技能格式跟在怪物後面, 以 #Learn 開始, End 結束"
+      },
+      {
+        "path": "download/index.html",
+        "title": "三國歪傳之降龍伏虎",
+        "summary": "鏡像的官方下載入口索引"
+      }
+    ]
+  },
+  {
+    "archives": [
+      {
+        "file": "download/merc-fju.tar.gz",
+        "size": 1144260
+      },
+      {
+        "file": "download/merc-fju-2.0.tar.gz",
+        "size": 1280407
+      },
+      {
+        "file": "download/fjumud.tar.gz",
+        "size": 1190578
+      }
+    ]
+  }
+]

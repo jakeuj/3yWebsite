@@ -1,0 +1,54 @@
+:root {
+  --accent: #b34700;
+  --bg-callout: #fff7e6;
+  --border-callout: #ffb347;
+  --table-header: #ffe0b2;
+}
+
+body {
+  font-family: "Noto Sans TC", "PingFang TC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.2rem 0;
+  font-size: 0.95rem;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+}
+
+th {
+  background: var(--table-header);
+  text-align: left;
+}
+
+td code {
+  background: #f2f2f2;
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+}
+
+.callout {
+  border-left: 4px solid var(--border-callout);
+  background: var(--bg-callout);
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+}
+
+.callout strong {
+  color: var(--accent);
+}
+
+.badge {
+  display: inline-block;
+  background: #222;
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.15rem 0.85rem;
+  font-size: 0.85rem;
+  margin-right: 0.4rem;
+}

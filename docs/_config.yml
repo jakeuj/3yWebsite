@@ -1,0 +1,29 @@
+# Sango3838 GitHub Pages config
+lang: zh-TW
+timezone: Asia/Taipei
+title: "Sango3838 資料索引"
+description: "三國歪傳之降龍伏虎網站鏡像，整理成 merc-area-builder 服務用的知識庫"
+theme: minima
+permalink: pretty
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "default"
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+include:
+  - assets
+  - data
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+  syntax_highlighter: rouge
