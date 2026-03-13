@@ -1,0 +1,35 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# JetBrains
+.idea/
+*.iml
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.venv/
+venv/
+env/
+ENV/
+
+# Jekyll / Bundler
+.bundle/
+vendor/bundle/
+docs/.jekyll-cache/
+docs/.sass-cache/
+docs/.jekyll-metadata
+docs/_site/
+
+# Logs
+*.log
