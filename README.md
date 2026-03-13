@@ -31,12 +31,50 @@ python3 scripts/check_coverage.py
 | `docs/maps.md` | 地圖交通、推薦等級、區域鉤點。 |
 | `docs/download.md` | 下載檔案與區域撰寫手冊索引。 |
 | `docs/links.md` | 外部連結、phorum、telnet 資訊。 |
-| `scripts/build_docs.py` | 解析 HTML → JSON 的主要工具。 |
+| `scripts/build_docs.py` | 解析 HTML → JSON 的主要工具（需 `beautifulsoup4`）。 |
 | `scripts/check_coverage.py` | 確認網站所有 HTML 均分派到 docs 章節。 |
 | `scripts/serve_docs.sh` | 包裝 `bundle exec jekyll serve --source docs` 的便利指令。 |
+
+> 若第一次執行 `scripts/build_docs.py` 遇到缺少套件，可使用 `pip3 install --user --break-system-packages beautifulsoup4` 安裝依賴。
+
+## 技能支援
+
+`/.agent/skills/sango-docs-service/SKILL.md` 為專用技能，協助其他代理在回答 merc-area-builder 相關問題時，快速定位 `docs/*.md` 與 `docs/data/*.json` 中的資訊。當需求涉及 Sango3838 世界觀、公告、技能或交通資料時，該技能會指引：
+
+1. 先查 `docs/index.md` 判斷章節。
+2. 依主題開啟對應 Markdown。
+3. 需要批次資料時讀取 JSON 檔（如 `news.json`, `skills.json`）。
+4. 回覆內標註「> 原文：相對路徑」以利追溯。
+
+若更新 docs 內容，記得同步執行 `python3 scripts/build_docs.py` 以重建資料集，與 `python3 scripts/check_coverage.py` 檢查是否仍然覆蓋所有 HTML。
 
 ## GitHub Pages 建置
 
 1. 於 repo 的 **Settings → Pages**，Source 選擇 `Deploy from a branch`。
 2. Branch 設為 `main`、資料夾為 `/docs`。
 3. 儲存後等待建置，若失敗可使用 `jekyll build --source docs` 在本機重現並修正。
+
+## docs 內容概述
+
+`docs/` 目錄是一份靜態知識庫，可直接部署為 GitHub Pages。內容分成兩層：
+
+1. **Markdown 主題檔**：對應網站主題（系統公告、技能、國家、交通等）。每篇除了描述，也列出「如何支援 merc-area-builder」的指引，並提供原文路徑供追溯。
+2. **JSON 資料集（`docs/data/*.json`）**：由 `scripts/build_docs.py` 產生，可用於批次查詢：
+   - `news.json`：公告日期、標題、摘要、檔案路徑。
+   - `skills.json`：每個技能的分類、中文/英文名、資源消耗、職業限制等欄位。
+   - `realm_commands.json`：`realm/doc/*.html` 中的指令與說明。
+   - `maps.json`、`downloads.json`、`links.json`、`commands.json`、`immortals.json`：對應地圖、下載、外部資源、指令索引、Immortal 名單。
+
+當需要補強內容時，建議流程：
+
+```bash
+# 1. 重新擷取資料（若有新增 HTML/內容）
+python3 scripts/build_docs.py
+
+# 2. 確認是否所有 HTML 仍有對應章節
+python3 scripts/check_coverage.py
+
+# 3. 在 docs/*.md 中補充說明或插入表格/引用
+```
+
+完成後可使用 `./scripts/serve_docs.sh`（livereload）檢查樣式，再 push 供 GitHub Pages 重建。
