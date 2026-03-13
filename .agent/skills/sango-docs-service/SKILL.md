@@ -17,7 +17,9 @@ description: 使用 /Users/jakeuj/codex/3yWebsite/docs 內的 Sango3838 GitHub P
    - 地圖交通 → `docs/maps.md`
    - 下載／撰寫手冊 → `docs/download.md`
    - 外部連結 → `docs/links.md`
-3. **資料集 JSON**：需批次查詢（例如列出所有公告或技能欄位）時，讀取對應 `docs/data/*.json`：`news.json`, `skills.json`, `realm_commands.json`, `maps.json`, `downloads.json`, `links.json`, `commands.json`, `immortals.json`。
+3. **資料集 JSON**：需批次查詢（例如列出所有公告或技能欄位）時，讀取對應 `docs/data/*.json`：`news.json`, `skills.json`, `realm_commands.json`, `maps.json`, `downloads.json`, `links.json`, `commands.json`, `players.json`, `immortals.json`。其中：
+   - `players.json` 收錄 `newhand/players/*/*.html` 的分類、標題與摘要，配合 `docs/newbie.md` 的「玩家心得／職業心得／NPC 對照」可找到技能 NPC 或掉落地點。
+   - `maps.json` 與 `map/bus.html` 對應 `docs/maps.md`，提供 ASCII 地圖及巴士站（站號、票價）資訊。
 
 ## 2. 常見任務映射（面向 merc-area-builder）
 - **規劃新區域故事/Serial**：
@@ -31,6 +33,7 @@ description: 使用 /Users/jakeuj/codex/3yWebsite/docs 內的 Sango3838 GitHub P
   2. 需要完整欄位時從 `docs/data/skills.json` 過濾（可用 `jq`）。
 - **國家／政體互動**：查看 `docs/realm.md` 內指令表；若要撰寫 MUDProg，利用 `realm_commands.json` 取得原文敘述。
 - **交通／地圖**：`docs/maps.md` + `maps.json`；需要巴士價格時引用 `map/bus.html` 路徑。
+- **玩家攻略**：`docs/newbie.md` 的「玩家心得」「職業心得」「NPC/掉落對照」段落，並可用 `players.json` 篩選指定職業（例：`jq '.[] | select(.category==\"bravo\")' docs/data/players.json`）。
 - **下載與區域撰寫手冊**：`docs/download.md`；如需提醒匯入 merc-fju-2.0 資料，可指出對應 `.tar.gz` 檔案大小。
 
 ## 3. 引用與來源標註

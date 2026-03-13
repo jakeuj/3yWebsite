@@ -238,6 +238,30 @@ def parse_commands() -> List[Dict[str, str]]:
     return entries
 
 
+def parse_player_guides() -> List[Dict[str, str]]:
+    base = ROOT / "newhand" / "players"
+    entries: List[Dict[str, str]] = []
+    for html_file in sorted(base.rglob("*")):
+        if not html_file.suffix.lower().startswith(".htm"):
+            continue
+        if html_file.name.startswith("index."):
+            continue
+        soup = read_html(html_file)
+        heading = soup.find("span", class_="text2")
+        title = heading.get_text(strip=True) if heading else (
+            soup.title.get_text(strip=True) if soup.title else html_file.stem
+        )
+        entries.append(
+            {
+                "path": relpath(html_file),
+                "category": html_file.relative_to(base).parts[0],
+                "title": title,
+                "summary": extract_first_paragraph(soup)[:280],
+            }
+        )
+    return entries
+
+
 def parse_imm_list() -> List[Dict[str, str]]:
     imm_dir = ROOT / "imm"
     entries = []
@@ -277,6 +301,7 @@ def main() -> None:
         "downloads.json": parse_downloads(),
         "links.json": parse_links(),
         "commands.json": parse_commands(),
+        "players.json": parse_player_guides(),
         "immortals.json": parse_imm_list(),
     }
     for name, payload in datasets.items():

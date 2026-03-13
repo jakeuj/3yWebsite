@@ -25,7 +25,7 @@ python3 scripts/check_coverage.py
 | --- | --- |
 | `docs/index.md` | 首頁 Portal：背景、導覽、部署步驟與 merc-area-builder 對應。 |
 | `docs/system.md` | 系統公告、世界觀、Immortal 名冊。 |
-| `docs/newbie.md` | 新手規則、指令、玩家心得。 |
+| `docs/newbie.md` | 新手規則、指令、玩家心得、職業攻略與 NPC/掉落對照。 |
 | `docs/skills.md` | 技能/職業/法術統整。 |
 | `docs/realm.md` | 國家系統、權限與廣告。 |
 | `docs/maps.md` | 地圖交通、推薦等級、區域鉤點。 |
@@ -39,7 +39,7 @@ python3 scripts/check_coverage.py
 
 ## 技能支援
 
-`/.agent/skills/sango-docs-service/SKILL.md` 為專用技能，協助其他代理在回答 merc-area-builder 相關問題時，快速定位 `docs/*.md` 與 `docs/data/*.json` 中的資訊。當需求涉及 Sango3838 世界觀、公告、技能或交通資料時，該技能會指引：
+`/.agent/skills/sango-docs-service/SKILL.md` 為專用技能，協助其他代理在回答 merc-area-builder 相關問題時，快速定位 `docs/*.md` 與 `docs/data/*.json`（包含職業攻略 `players.json`）中的資訊。當需求涉及 Sango3838 世界觀、公告、技能或交通資料時，該技能會指引：
 
 1. 先查 `docs/index.md` 判斷章節。
 2. 依主題開啟對應 Markdown。
@@ -64,6 +64,8 @@ python3 scripts/check_coverage.py
    - `skills.json`：每個技能的分類、中文/英文名、資源消耗、職業限制等欄位。
    - `realm_commands.json`：`realm/doc/*.html` 中的指令與說明。
    - `maps.json`、`downloads.json`、`links.json`、`commands.json`、`immortals.json`：對應地圖、下載、外部資源、指令索引、Immortal 名單。
+   - `players.json`：`newhand/players/*/*.html` 摘要，包含分類（如 newplayer/bravo）、標題與首段內容，可快速搜尋歷史心得。
+   - 搭配 `docs/newbie.md` 的「玩家心得」「職業心得」「NPC/掉落對照」，可迅速查到攻略提到的 NPC（例：程昱、蒯越、襄平主廚）或交通節點後續動作。
 
 當需要補強內容時，建議流程：
 
