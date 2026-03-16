@@ -15,6 +15,13 @@ except ImportError as exc:  # pragma: no cover
     raise SystemExit("Missing dependency beautifulsoup4. Install via `pip install beautifulsoup4`." ) from exc
 
 ROOT = Path(__file__).resolve().parent.parent
+CATEGORY_ORDER = ["武器技能", "法術技能", "職業技能", "其他技能"]
+CATEGORY_DESCRIPTIONS = {
+    "武器技能": "劍、刀、弓、槍、棍、斧、鞭、扇、短兵、拳法、氣功。",
+    "法術技能": "火、風、光、聖、雷、水、土、暗、邪、毒系。",
+    "職業技能": "格鬥、暗殺、法師、鑄造、吟唱、醫療、盜賊。",
+    "其他技能": "步法、技能總覽、技能熟練度。",
+}
 
 
 def read_html(path: Path) -> BeautifulSoup:
@@ -56,6 +63,14 @@ def parse_labeled_block(text: str) -> Dict[str, str]:
 
 def relpath(path: Path) -> str:
     return path.relative_to(ROOT).as_posix()
+
+
+def markdown_link(path: str) -> str:
+    return f"[`{path}`]({{{{ '/{path}' | relative_url }}}})"
+
+
+def markdown_text(value: str) -> str:
+    return value.replace("|", "\\|").strip()
 
 
 def extract_first_paragraph(soup: BeautifulSoup) -> str:
@@ -311,14 +326,124 @@ def write_json(path: Path, payload) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
+def write_markdown(path: Path, content: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content, encoding="utf-8")
+
+
+def generate_skills_markdown(skills: List[Dict[str, str]]) -> str:
+    grouped: Dict[str, List[Dict[str, str]]] = {category: [] for category in CATEGORY_ORDER}
+    for skill in skills:
+        grouped.setdefault(skill.get("category", "未分類"), []).append(skill)
+
+    lines: List[str] = [
+        "---",
+        "layout: default",
+        "title: 技能資料庫",
+        "---",
+        "",
+        "# 技能資料庫與職業設定",
+        "",
+        "> 與區域開發的關聯：技能決定 NPC 能力、掉落秘笈、任務獎勵與訓練場內容。此頁依 `docs/data/skills.json` 與 `skill/index.html` 生成，方便在 GitHub Pages 直接查看分類與詳細欄位。",
+        "",
+        "## 類別統計",
+        "",
+        "| 類別 | 檔案數 | 說明 |",
+        "| --- | --- | --- |",
+    ]
+
+    for category in CATEGORY_ORDER:
+        lines.append(
+            f"| {category} | {len(grouped.get(category, []))} | {CATEGORY_DESCRIPTIONS[category]} |"
+        )
+
+    lines.extend(
+        [
+            "",
+            "- `scripts/build_docs.py` 會根據 `skill/index.html` 重建 `docs/data/skills.json` 與本頁；若新增類別或技能頁，請更新來源 HTML 後重跑腳本。",
+            "- `skill/learnlv.html` 屬於「技能熟練度」參照頁；它應計入 `skill/index.html` 的分類統計，但不應和一般技能明細頁等量看待。",
+            "",
+            "## 展開詳細資料",
+            "",
+            "以下內容可直接在 GitHub Pages 展開查看，不必回到原始 HTML 逐頁翻找。",
+        ]
+    )
+
+    for category in CATEGORY_ORDER:
+        items = grouped.get(category, [])
+        if not items:
+            continue
+        lines.extend(["", f"## {category}", ""])
+        for skill in items:
+            path = skill["path"]
+            is_special = path == "skill/learnlv.html"
+            cname = skill.get("中文名稱") or skill.get("display_name") or Path(path).stem
+            ename = skill.get("英文名稱", "")
+            summary_parts = [f"<strong>{markdown_text(cname)}</strong>"]
+            if ename:
+                summary_parts.append(f"(`{markdown_text(ename)}`)")
+            if is_special:
+                summary_parts.append(" - 特殊參照頁")
+            lines.append(f"<details><summary>{''.join(summary_parts)}</summary>")
+            lines.append("")
+            lines.append(f"- 原文頁面：{markdown_link(path)}")
+            lines.append(f"- 類別：{category}")
+            if is_special:
+                lines.append("- 說明：這頁是技能熟練度參照，不是一般技能明細頁，因此不一定會有 `英文名稱 / 中文名稱 / 領悟技能` 等欄位。")
+            else:
+                for key in [
+                    "英文名稱",
+                    "中文名稱",
+                    "攻擊武器",
+                    "互相教導",
+                    "技能功能",
+                    "技能分類",
+                    "浪費數值",
+                    "領悟技能",
+                    "領悟機率",
+                    "預備功夫",
+                    "職業限制",
+                    "限 制",
+                    "教 導",
+                ]:
+                    value = skill.get(key, "").strip()
+                    if value:
+                        lines.append(f"- {key}：{markdown_text(value)}")
+            lines.append("")
+            lines.append("</details>")
+
+    lines.extend(
+        [
+            "",
+            "## 區域設計建議",
+            "",
+            "1. **掉落／習得來源**：於 `res` 檔內安排 NPC 擁有特定技能，並在 `mob` 描述中註記「可教導」或「僅領悟」。",
+            "2. **熟練度上限**：技能頁面常以「馬馬虎虎」、「神乎其技」描述各職業上限，請在 NPC 對話或任務條件中引用這些詞彙，避免與英文 Rank 混用。",
+            "3. **資源消耗**：資料欄位中的「浪費數值」可直接映射成戰鬥節奏；例如步法技能多耗體力，在山地或長途區域可安排更多休息節點。",
+            "4. **秘笈／study**：任何 `study` 互動都需在區域 `obj` 檔設計對應書籍，並在 `help` 或 `notes` 中補足說明。",
+            "",
+            "## 與公告／國家系統的連動",
+            "",
+            "- 請對照 `system.md` 的公告時間線；例如某步法在特定日期後才開放時，區域掉落或 NPC 教學也應標註版本時點。",
+            "- 國家系統指令如 `realm !join` 會查技能欄位（權限），因此 `realm.md` 的資料應與此頁交叉檢查。",
+            "",
+            "> 原文：skill/index.html 及所有 `skill/*.html`",
+            "",
+        ]
+    )
+    return "\n".join(lines)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Build structured data for docs")
     parser.add_argument("--out", default=ROOT / "docs" / "data", type=Path)
     args = parser.parse_args()
 
+    skill_mapping = parse_skill_index()
+    skills = parse_skills(skill_mapping)
     datasets = {
         "news.json": parse_news(args.out),
-        "skills.json": parse_skills(parse_skill_index()),
+        "skills.json": skills,
         "realm_commands.json": parse_realm_docs(),
         "maps.json": parse_maps(),
         "downloads.json": parse_downloads(),
@@ -329,6 +454,7 @@ def main() -> None:
     }
     for name, payload in datasets.items():
         write_json(args.out / name, payload)
+    write_markdown(ROOT / "docs" / "skills.md", generate_skills_markdown(skills))
     print(f"Generated {len(datasets)} datasets into {args.out}")
 
 
