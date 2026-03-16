@@ -1,0 +1,5 @@
+interface:
+  display_name: "Sango Docs Service"
+  short_description: "查 Sango3838 docs 與 JSON 維護規則"
+  default_prompt: "Use $sango-docs-service to inspect docs/3yWebsite datasets, especially players.json and skills.json, before updating docs or sync rules."
+

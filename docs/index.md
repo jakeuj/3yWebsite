@@ -38,12 +38,21 @@ title: 首頁 Portal
 | --- | --- |
 | `docs/data/news.json` | 系統公告（日期、標題、摘要、原始 HTML）。 |
 | `docs/data/skills.json` | 各技能的分類、英文名、資源消耗。 |
+| `docs/data/players.json` | 玩家攻略摘要、職業分類與歷史心得入口。 |
 | `docs/data/realm_commands.json` | `realm/doc/*.html` 解析後的指令與說明。 |
 | `docs/data/maps.json` | 每張地圖的標題、首段摘要。 |
 | `docs/data/downloads.json` | 下載頁面摘要＋ `.tar.gz` 檔案大小。 |
 | `docs/data/links.json` | 外部連結與來源頁。 |
 | `docs/data/commands.json` | `newhand/commands` 目錄的條目摘要。 |
 | `docs/data/immortals.json` | Immortal 名冊（頁面、摘要、Email）。 |
+
+目前資料基線：
+
+- `docs/data/skills.json`：`31` 筆，分類應為武器 `11` / 法術 `10` / 職業 `7` / 其他 `3`。
+- `docs/data/players.json`：`26` 筆，分類應為 `bard 2 / bravo 8 / general 7 / mage 2 / newplayer 7`，且包含 `1` 筆 `.htm` 舊檔。
+- 若任一基線改變，除了重跑 `scripts/build_docs.py`，也要同步檢查 `README.md`、`docs/newbie.md`、`docs/skills.md` 與 `docs/3yWebsite/.agents/skills/sango-docs-service/SKILL.md`。
+
+> 維護流程請見 [資料同步計畫](dataset-sync-plan.md)
 
 ## 部署與預覽
 

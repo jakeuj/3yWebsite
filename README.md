@@ -39,7 +39,7 @@ python3 scripts/check_coverage.py
 
 ## 技能支援
 
-`/.agent/skills/sango-docs-service/SKILL.md` 為專用技能，協助其他代理在回答 merc-area-builder 相關問題時，快速定位 `docs/*.md` 與 `docs/data/*.json`（包含職業攻略 `players.json`）中的資訊。當需求涉及 Sango3838 世界觀、公告、技能或交通資料時，該技能會指引：
+`docs/3yWebsite/.agents/skills/sango-docs-service/SKILL.md` 為專用技能，協助其他代理在回答 merc-area-builder 相關問題時，快速定位 `docs/*.md` 與 `docs/data/*.json`（包含職業攻略 `players.json` 與技能資料 `skills.json`）中的資訊。當需求涉及 Sango3838 世界觀、公告、技能、玩家攻略或交通資料時，該技能會指引：
 
 1. 先查 `docs/index.md` 判斷章節。
 2. 依主題開啟對應 Markdown。
@@ -47,6 +47,27 @@ python3 scripts/check_coverage.py
 4. 回覆內標註「> 原文：相對路徑」以利追溯。
 
 若更新 docs 內容，記得同步執行 `python3 scripts/build_docs.py` 以重建資料集，與 `python3 scripts/check_coverage.py` 檢查是否仍然覆蓋所有 HTML。
+
+## 資料集基線
+
+目前維護 `players.json` 與 `skills.json` 時，預期基線如下：
+
+| 檔案 | 目前筆數 | 核對重點 |
+| --- | --- | --- |
+| `docs/data/skills.json` | `31` | 類別分佈應為武器 `11`、法術 `10`、職業 `7`、其他 `3`；`skill/learnlv.html` 是特殊參照頁。 |
+| `docs/data/players.json` | `26` | 類別分佈應為 `bard 2 / bravo 8 / general 7 / mage 2 / newplayer 7`；其中 `newhand/players/newplayer/9907151.htm` 是唯一 `.htm` 舊檔，仍應被收錄。 |
+
+若這些數字改變，先確認是否是來源 HTML 真的新增/刪除，而不是 parser 漏抓。
+
+## 維護計畫
+
+`[docs/dataset-sync-plan.md](docs/dataset-sync-plan.md)` 整理了 `players.json` / `skills.json` 的同步節點、驗證步驟與文件回寫規則。當任務是「更新相關技能與說明文件和計畫」時，預設應一起檢查：
+
+1. `docs/3yWebsite/.agents/skills/sango-docs-service/SKILL.md`
+2. `docs/3yWebsite/README.md`
+3. `docs/3yWebsite/docs/index.md`
+4. `docs/3yWebsite/docs/newbie.md` 或 `docs/3yWebsite/docs/skills.md`
+5. `docs/3yWebsite/docs/dataset-sync-plan.md`
 
 ## GitHub Pages 建置
 
