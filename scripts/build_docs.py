@@ -27,6 +27,33 @@ def clean_text(text: str) -> str:
     return " ".join([r for r in rows if r])
 
 
+def parse_labeled_block(text: str) -> Dict[str, str]:
+    info: Dict[str, str] = {}
+    current_key = ""
+    current_parts: List[str] = []
+
+    for raw in text.splitlines():
+        normalized = re.sub(r"\s+", " ", raw.strip()).replace("﹕", "：")
+        if not normalized:
+            continue
+
+        if "：" in normalized:
+            if current_key:
+                info[current_key] = " ".join(current_parts).strip()
+            key, value = normalized.split("：", 1)
+            current_key = key.strip()
+            current_parts = [value.strip()] if value.strip() else []
+            continue
+
+        if current_key:
+            current_parts.append(normalized)
+
+    if current_key:
+        info[current_key] = " ".join(current_parts).strip()
+
+    return info
+
+
 def relpath(path: Path) -> str:
     return path.relative_to(ROOT).as_posix()
 
@@ -106,11 +133,7 @@ def parse_skills(mapping: Dict[str, str]) -> List[Dict[str, str]]:
                 target = text
                 break
         if target:
-            for raw in target.split("\n"):
-                normalized = raw.replace("﹕", "：")
-                if "：" in normalized:
-                    key, value = normalized.split("：", 1)
-                    info[key.strip()] = value.strip()
+            info.update(parse_labeled_block(target))
         title_tag = soup.find("div", align="center")
         if title_tag and "img" not in title_tag.decode_contents():
             info.setdefault("display_name", clean_text(title_tag.get_text()))

@@ -17,6 +17,7 @@ title: 技能資料庫
 | 其他技能 | 3 | 步法、技能總覽、技能熟練度。 |
 
 - `scripts/build_docs.py` 會根據 `skill/index.html` 解析分類；若新增類別，記得更新該 HTML 後重跑腳本。
+- `skill/learnlv.html` 屬於「技能熟練度」參照頁，不是一般技能明細頁；它應計入 `skill/index.html` 的分類統計，但不應和 `skill/sword.html`、`skill/step.html` 這類有完整 `英文名稱 / 中文名稱 / 領悟技能` 區塊的技能頁等量看待。
 - 依 `merc-area-builder` 建議，可將掉落/訓練表格寫入區域 `res` 檔，並引用此表格中的中文/英文名稱避免錯字。
 
 ## 代表性條目
